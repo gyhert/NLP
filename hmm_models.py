@@ -64,7 +64,7 @@ for i in range(len(tag)):
 
 print(tag)
 print(len(tag))
-print(len1)
+print(len2)
 print(len(f))
 """initial A B """
 for i in tag:
@@ -86,11 +86,15 @@ for i in range(len(f)):
     for j in range(len(g)):
         post = g[j].split('\t')
         prev = g[j-1].split('\t')
+        if post[-1] in tag:
+            fre[post[-1]] +=1
         if j > 0:
            A[prev[-1]][post[-1]] += 1
         if post[-1] in tag:
            B[post[-1]][post[0]] += 1
+           L +=1
 print(L)
+print(len2)
 
 cx = {}
 cy = {}
@@ -106,17 +110,26 @@ for i in tag:
         if B[i][j] == 0:
            cy[i] += 1
            B[i][j] = 0.5
-
+for i in tag:
+    pi[i] = pi[i] * 1.0 / len1
+    for j in tag:
+        A[i][j] = A[i][j]*1.0/(fre[i] + cx[i])
+    for j in word:
+        B[i][j] = B[i][j]*1.0/(fre[i] + cy[i])
+print(fre)
 print(pi)
+print(A)
 
+file.close
 
+"""test set """
 
+file = open('test.conll')
+content = file.read()
+f = content.split('\n\n')
+for i in range(len(f)):
+    d = str(f[i])
+    g = d.split('\n')
+print(g)
 
-
-
-
-"""
-for i in f:
-    print(i)
-"""
 file.close
