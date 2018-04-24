@@ -52278,5 +52278,4 @@ birthday	eng  NOUN
 present	eng  VERB
 .	eng&spa  PUNCT
 
-  INTJ
 

@@ -96,18 +96,18 @@ for i in tag:
     for j in tag:
         if A[i][j] == 0:
             cx[i] += 1
-            A[i][j] = 0.5
+            A[i][j] = 0.3
     for j in word:
         if B[i][j] == 0:
            cy[i] += 1
-           B[i][j] = 0.5
+           B[i][j] = 0.3
 for i in tag:
     pi[i] = pi[i] * 1.0 / len1
     for j in tag:
         A[i][j] = A[i][j]*1.0/(fre[i] + cx[i])
     for j in word:
         B[i][j] = B[i][j]*1.0/(fre[i] + cy[i])
-"""test set """
+"""test set/initial/smooth/viterbi/backtracking """
 
 file_test = open('test.conll', encoding='utf-8')
 content = file_test.read()
@@ -125,18 +125,18 @@ for i in range(len(f3)):
     word0 = g[0].split('\t')
     for c in tag:
         if word0[0] in B[c]:
-            dp[0][c] = pi[c]*(B[c][word0[0]])*1000
+            dp[0][c] = pi[c]*(B[c][word0[0]])*1500
         else:
-            dp[0][c] = pi[c]*0.5*1000/(cy[c] + fre[c])
+            dp[0][c] = pi[c]*0.3*1000/(cy[c] + fre[c])
     for i in range(len_sent):
         word1 = g[i].split('\t')
         for j in tag:
             for k in tag:
                 tt = 0
                 if word1[0] in B[j]:
-                    tt = B[j][word1[0]]*1000
+                    tt = B[j][word1[0]]*1500
                 else:
-                    tt = 0.5*1000 / (cy[j] + fre[j])
+                    tt = 0.3*1000 / (cy[j] + fre[j])
                 if dp[i][j] < dp[i-1][k]*A[k][j]*tt:
                    dp[i][j] = dp[i-1][k]*A[k][j]*tt
                    pre2[i][j] = k
@@ -145,16 +145,16 @@ for i in range(len(f3)):
     res = {}
     for j in tag:
         if MAX == "" or dp[len_sent-1][j] > dp[len_sent-1][MAX] :
-           MAX = j
+            MAX = j
     if dp[len_sent-1][MAX] == 0:
-           continue
+        continue
     i = len_sent - 1
     while i >= 0:
         res[i] = MAX
         MAX = pre2[i][MAX]
-        i -=1
+        i -= 1
     for i in range(0, len_sent):
-        print(g[i] + ' ' + res[i])
+        print('{}\t{}'.format(g[i], res[i]))
     print()
 
 file_dev.close
